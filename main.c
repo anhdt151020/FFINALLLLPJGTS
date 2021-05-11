@@ -4,7 +4,7 @@
 
 int n; //Bậc của đa thức
 double arayF[10]; //Mảng chứa hệ số của đa thức
-double arayCT[20]; //Mảng chứa x CTri
+double arayCT[18]; //Mảng chứa x CTri
 float cT, cD;
 
 typedef struct khoangPhanLy {
@@ -131,7 +131,7 @@ float canTren() {
             }
         } else if (index == 0){
             cT = 0;
-        }
+        } else  cT = 1 + pow((temp / arayF[0]), (1.0 / index));
     }
     return cT;
 }
@@ -143,16 +143,25 @@ float canDuoi() {
 }
 
 //Gradient descent
-float cucTriFx(float x0) {
+void cucTriFx(float x0) {
     int j = 0;
-    while (fabs(daoHamTai(x0)) > 0.001){
-        x0 = x0 + 0.005 * fabs(daoHamTai(x0));
+    for (int i = 0; i < (n - 1) * 2; ++i) {
+        if (x0 > cT){
+            break;
+        }
+        while (1){
+            if (x0 > cT){
+                break;
+            }
+            x0 = x0 + 0.005 * fabs(daoHamTai(x0));
+            if (fabs(daoHamTai(x0)) < 0.001){
+                arayCT[j] = x0;
+                j++;
+                x0 = x0 + 0.001;
+                continue;
+            }
+        }
     }
-    x0 = x0 + 0.002;
-    while (fabs(daoHamTai(x0)) > 0.001){
-        x0 = x0 + 0.005 * fabs(daoHamTai(x0));
-    }
-    return x0;
 }
 
 int main() {
@@ -162,5 +171,10 @@ int main() {
     canTren();
     canDuoi();
     printf("\nCan tren va can duoi cua mien chua nghiem thuc: \nCan tren =[%f], Can duoi =[%f]", cT, cD);
-    printf("\n  : %lf",cucTriFx(cD));
+    cucTriFx(cD);
+    for (int i = 0; i < (n - 1) * 2; ++i) {
+        if (arayCT[i] != 0){
+            printf("\ntai x= [%f] phuong trinh co cuc tri",arayCT[i]);
+        }
+    }
 }
