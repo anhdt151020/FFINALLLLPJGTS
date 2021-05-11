@@ -2,10 +2,9 @@
 #include <math.h>
 #include <stdlib.h>
 
-
 int n; //Bậc của đa thức
 double arayF[10]; //Mảng chứa hệ số của đa thức
-double arayCT[20]; //Mảng chứa x CT
+double arayCT[20]; //Mảng chứa x CTri
 float cT, cD;
 
 typedef struct khoangPhanLy {
@@ -99,36 +98,40 @@ float banKinhNghiem() {
 
 //Hàm tìm cận trên miền chứa nghiệm thực
 float canTren() {
-    float temp = 0, index = 0;
+    float temp = 0;
     double arrT[100];
-    int j = 0;
+    int j = 0, index = 0;
     if (arayF[0] < 0) {
         cT = banKinhNghiem();
     } else if (arayF[0] > 0) {
-        for (int i = 0; i < n + 1; ++i) {
+        for (int i = 1; i < n + 1; ++i) {
             if (arayF[i] < 0) {
                 arrT[j] = arayF[i];
                 j++;
             }
         }
-        for (int i = 0; i < j; ++i) {
+        for (int i = 0; i < j + 1; ++i) {
             if (fabs(arrT[i]) >= temp) {
                 temp = fabs(arrT[i]);
             }
         }
-        for (int i = 0; i < n; ++i) {
+        int i = 0;
+        do {
             if (arayF[i] < 0) {
                 index = i;
                 break;
             }
-        }
+            i++;
+        } while (i <= n);
         if (index == n) {
-            if (arayF[n] > 0) {
+            if (arayF[n] < 0){
+                cT = 1 + pow((temp / arayF[0]), (1.0 / index));
+            } else {
                 cT = 0;
             }
         } else if (index == 0){
             cT = 0;
-        } else cT = 1 + pow((temp / arayF[0]), (1.0 / index));
+        }
     }
     return cT;
 }
@@ -139,7 +142,25 @@ float canDuoi() {
     return cD;
 }
 
+//Gradient descent
+float cucTriFx(float x0) {
+    int j = 0;
+    while (fabs(daoHamTai(x0)) > 0.001){
+        x0 = x0 + 0.005 * fabs(daoHamTai(x0));
+    }
+    x0 = x0 + 0.002;
+    while (fabs(daoHamTai(x0)) > 0.001){
+        x0 = x0 + 0.005 * fabs(daoHamTai(x0));
+    }
+    return x0;
+}
+
 int main() {
-    printf("Hello, World!\n");
-    return 0;
+    float x;
+    nhapHamSo();
+    printf("Ham so da cho co nghiem nam trong mat tron tam O ban kinh R=[%f] o trong mat phang phuc", banKinhNghiem());
+    canTren();
+    canDuoi();
+    printf("\nCan tren va can duoi cua mien chua nghiem thuc: \nCan tren =[%f], Can duoi =[%f]", cT, cD);
+    printf("\n  : %lf",cucTriFx(cD));
 }
