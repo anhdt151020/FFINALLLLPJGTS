@@ -5,6 +5,7 @@
 int n,sCT; //Bậc của đa thức
 double arayF[10]; //Mảng chứa hệ số của đa thức
 double arayCT[18]; //Mảng chứa x CTri
+double araySol[10]; //Mảng chứa nghiệm
 float cT, cD;
 
 typedef struct khoangPhanLy {
@@ -155,7 +156,7 @@ void cucTriFx(float x0) {
 // Ham tim khoang phan ly nghiem (a,b) voi |a-b| = buocNhay
 void timKhoangPLNghiem(float buocNhay) {
     double arrGT[10000], check = 0, temp = cD;
-    int k = 0, i = 0;
+    int k = 0;
     int count = 0, index;
     for (int i = 0; i < 100000; ++i) {
         if (temp > cT) {
@@ -273,6 +274,7 @@ void main() {
                 }
                 buocNhay = 0;
                 ssCD = 0;
+
                 // Tìm khoảng phân ly nghiệm từ bán kính nghiệm và cận trên cận dưới miền chứa nghiệm.
                 buocNhay = (cT-cD)/100;
                 printf("Voi khoang cach k = 1/100 khoang chua nghiem ta su dung thuat toan vet can de tim khoang phan ly nghiem duoc:");
@@ -297,6 +299,21 @@ void main() {
                     if (arayCT[i] != 0){
                         printf("\n Tai x = [%f] ham so da cho co 1 cuc tri",arayCT[i]);
                     }
+                    if ((arayCT[i] == 0) && (daoHamTai(arayCT[i]) == 0)){
+                        printf("\n Tai x = [%f] ham so da cho co 1 cuc tri",arayCT[i]);
+                    }
+                }
+                for (int i = 0; i < sCT; ++i) {
+                    if (arayCT[i] != 0){
+                        if (fabs(giaTriHamSoTai(arayCT[i])) < 0.001){
+                            printf("\nCuc tri x = [%f] la mot nghiem cua ham so da cho",arayCT[i]);
+                        }
+                    }
+                    if ((arayCT[i] == 0) && (daoHamTai(arayCT[i]) == 0)){
+                        if (fabs(giaTriHamSoTai(arayCT[i])) < 0.001){
+                            printf("\nCuc tri x = [%f] la mot nghiem cua ham so da cho",arayCT[i]);
+                        }
+                    }
                 }
                 printf("\n Voi cac cuc tri da tim duoc ta co the xet cac khoang phan ly nghiem sau day:\n");
                 int j = 1;
@@ -310,6 +327,7 @@ void main() {
                     }
                     j++;
                 }
+
                 int index = 1;
                 printf("\n\n");
                 printf("\t\t\t+------------------+--------------------+----------------------+\n");
@@ -325,7 +343,12 @@ void main() {
                         index++;
                     }
                 }
-                printf("Su dung thuat toan chia doi de rut gon khoang cach ly nghiem voi sai so cho truoc la: 0.0001 ta duoc: \n");
+                if (index != 1){
+                    printf("Su dung thuat toan chia doi de rut gon khoang cach ly nghiem voi sai so cho truoc la: 0.0001 ta duoc: \n");
+                }
+                if (index == 1){
+                    printf("\n Khong tim duoc nghiem cua phuong trinh bang phuong phap chia doi\n");
+                }
                 chiaDoi(0.0001);
                 break;
             case 3:
