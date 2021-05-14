@@ -140,7 +140,7 @@ void cucTriFx(float x0) {
             if (x0 > cT){
                 break;
             }
-            x0 = x0 + 0.005 * fabs(daoHamTai(x0));
+            x0 = x0 + 0.0005 * fabs(daoHamTai(x0));
             if (fabs(daoHamTai(x0)) < 0.001){
                 arayCT[j] = x0;
                 j++;
