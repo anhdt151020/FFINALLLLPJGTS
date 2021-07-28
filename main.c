@@ -4,6 +4,7 @@
 
 int n,sCT; //Bậc của đa thức
 double arayF[10]; //Mảng chứa hệ số của đa thức
+double arayF1[10]; //Mảng chứa hệ số của đa thức đạo hàm
 double arayCT[18]; //Mảng chứa x CTri
 double araySol[10]; //Mảng chứa nghiệm
 float cT, cD;
@@ -14,6 +15,7 @@ typedef struct khoangPhanLy {
 } kpl;
 
 kpl arrKPL[20]; //Mảng chứa khoảng phân ly của đa thức
+kpl arrKPL1[20]; //Mảng chứa khoảng phân ly dự phòng
 
 // Hàm nhập hệ số của phương trình y = f(x)
 void nhapHeSo() {
@@ -62,11 +64,21 @@ double giaTriHamSoTai(double x0) {
     return temp;
 }
 
-// Ham tinh dao ham cua ham so tai mot diem
+// Hàm tính đạo hàm cấp 1 của hàm số tại một điểm
 double daoHamTai(double temp) {
     double sum = 0;
     for (int i = 0; i <= n - 1; i++) {
         sum = sum + arayF[i] * (n - i) * pow(temp, n - i - 1);
+        arayF1[i] = arayF[i] * (n - 1);
+    }
+    return sum;
+}
+
+//Hàm tính đạo hàm cấp 2 của hàm số tại một điểm
+double daoHamCap2Tai(double temp) {
+    double sum = 0;
+    for (int i = 0; i <= n - 1; i++) {
+        sum = sum + arayF1[i] * (n - i - 1) * pow(temp, n - i - 2);
     }
     return sum;
 }
@@ -238,12 +250,179 @@ void chiaDoi(double ssCD) {
         }
         printf("\t\t\t+----+---------------+---------------+---------------+---------+----------------+\n");
         count = 0;
-        printf("\n x= %f", c);
-        printf("\n sai so= %f\n", temp);
+        printf("\n x= %.15f", c);
+        printf("\n sai so= %.15f\n", temp);
     }
 }
 
+// Rút gọn khoảng phân ly nghiệm bằng phương pháp dây cung
+void dayCung(double ssDC){
+    double mi,ma,c,temp,check;
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        count = 1;
+        if (giaTriHamSoTai(arrKPL[i].a) * giaTriHamSoTai(arrKPL[i].b) > 0) {
+            continue;
+        }
+        mi = fabs(daoHamTai(arrKPL[i].a));
+        ma = fabs(daoHamTai(arrKPL[i].b));
+        if (mi > ma){
+            float k;
+            k = mi;
+            mi = ma;
+            ma = k;
+        }
+        c = arrKPL[i].a - giaTriHamSoTai(arrKPL[i].a)*((arrKPL[i].b-arrKPL[i].a)/(giaTriHamSoTai(arrKPL[i].b)- giaTriHamSoTai(arrKPL[i].a)));
+        temp = c;
+        if (giaTriHamSoTai(c) * giaTriHamSoTai(arrKPL[i].a) < 0){
+            arrKPL[i].b = c;
+        }
+        if (giaTriHamSoTai(c) * giaTriHamSoTai(arrKPL[i].b) < 0){
+            arrKPL[i].a = c;
+        }
+        c = arrKPL[i].a - giaTriHamSoTai(arrKPL[i].a)*((arrKPL[i].b-arrKPL[i].a)/(giaTriHamSoTai(arrKPL[i].b)- giaTriHamSoTai(arrKPL[i].a)));
+        check = ((ma - mi)/mi) * fabs(c - temp);
+        printf("x0 = %.15f\n",c);
+        printf("\t\t\t+----+--------------------+--------------------+--------------------+------------------------+\n");
+        printf("\t\t\t|  i |         xn         |        xn-1        |       sai so       |       sai so < ssDC    |\n");
+        printf("\t\t\t+----+--------------------+--------------------+--------------------+------------------------+\n");
+        while (check > ssDC){
+            temp = c;
+            if (giaTriHamSoTai(c) * giaTriHamSoTai(arrKPL[i].a) < 0){
+                arrKPL[i].b = c;
+            }
+            if (giaTriHamSoTai(c) * giaTriHamSoTai(arrKPL[i].b) < 0){
+                arrKPL[i].a = c;
+            }
+            c = arrKPL[i].a - giaTriHamSoTai(arrKPL[i].a)*((arrKPL[i].b-arrKPL[i].a)/(giaTriHamSoTai(arrKPL[i].b)- giaTriHamSoTai(arrKPL[i].a)));
+            check = ((ma - mi)/mi) * fabs(c - temp);
+            if( check < ssDC){
+                printf("\t\t\t| %2d | %3.15f | %4.15f | %4.16f |          true          |\n",count,c,temp,check);
+                printf("\t\t\t+----+--------------------+--------------------+--------------------+------------------------+\n");
+                printf("nghiem x = %.15f\n",c);
+                printf("sai so hai lan lap lien tiep = %.15f\n",check);
+                printf("sai so = %.15f\n", fabs(giaTriHamSoTai(c)));
+                printf("\t\t\t\t\t\t\t\t *-*-* \n");
 
+            }
+            if( check > ssDC){
+                printf("\t\t\t| %2d | %3.15f | %4.15f | %4.16f |          false         |\n",count,c,temp,check);
+            }
+            count ++;
+
+        }
+    }
+
+}
+
+// Rút gọn khoảng phân ly nghiệm bằng phương pháp tiếp tuyến
+void tiepTuyen(double ssTT) {
+    double mi1, ma1, mi2, ma2, check, temp, checkss, tempss;
+    int count = 0;
+    daoHamTai(0);
+    for (int i = 0; i < n; ++i) {
+        count = 1;
+        mi1 = fabs(daoHamTai(arrKPL[i].a));
+        ma1 = fabs(daoHamTai(arrKPL[i].b));
+        if (mi1 > ma1){
+            temp = mi1;
+            mi1 = ma1;
+            ma1 = temp;
+            temp = 0;
+        }
+        mi2 = fabs(daoHamCap2Tai(arrKPL[i].a));
+        ma2 = fabs(daoHamCap2Tai(arrKPL[i].b));
+        if (mi2 > ma2){
+            temp = mi2;
+            mi2 = ma2;
+            ma2 = temp;
+            temp = 0;
+        }
+        if (arrKPL[i].a * daoHamCap2Tai(arrKPL[i].a) > 0) {
+            temp = arrKPL[i].a - (giaTriHamSoTai(arrKPL[i].a) / daoHamTai(arrKPL[i].a));
+            printf("Chon xap xi dau la can duoi cua khoang phan li, giao diem giua tiep tuyen tai xap xi dau voi truc hoanh x0= %f \n", temp);
+        } else if (arrKPL[i].b * daoHamCap2Tai(arrKPL[i].b > 0)) {
+            temp = arrKPL[i].b - (giaTriHamSoTai(arrKPL[i].b) / daoHamTai(arrKPL[i].b));
+            printf("Chon xap xi dau la can tren cua khoang phan li, giao diem giua tiep tuyen tai xap xi dau voi truc hoanh x0= %f \n", temp);
+        }
+        check = fabs(giaTriHamSoTai(temp));
+        printf("\t\t\t+----+--------------------+--------------------+--------------------+------------------------+\n");
+        printf("\t\t\t|  i |         xn         |        xn-1        |       sai so       |       sai so < ssDC    |\n");
+        printf("\t\t\t+----+--------------------+--------------------+--------------------+------------------------+\n");
+        while (check > ssTT) {
+            tempss = temp;
+            temp = temp - (giaTriHamSoTai(temp) / daoHamTai(temp));
+            checkss = ma2/(2*mi1)* fabs(temp - tempss) * fabs(temp - tempss);
+            check = fabs(giaTriHamSoTai(temp));
+            if (check <= ssTT) {
+                printf("\t\t\t| %2d | %3.15f | %4.15f | %4.16f |          true          |\n",count,temp,tempss,check);
+                printf("\t\t\t+----+--------------------+--------------------+--------------------+------------------------+\n");
+                printf("x = %.15f\n", temp);
+                printf("sai so hai lan lap lien tiep = %.25f\n",checkss);
+                printf("sai so = %.25f\n",check);
+                printf("\t\t\t\t\t\t\t\t *-*-* \n");
+            }
+            if (check > ssTT) {
+                printf("\t\t\t| %2d | %3.15f | %4.15f | %4.16f |          false         |\n",count,temp,tempss,check);
+            }
+            count ++;
+        }
+    }
+}
+
+//Menu chọn thuật toán lặp
+void menu(){
+    int choose;
+    do {
+        printf("\n");
+        printf("\t\t\t+-------------------------------------------------------------------------------------+\n");
+        printf("\t\t\t|                           ***  CHON PHUONG PHAP LAP  ***                            |\n");
+        printf("\t\t\t+-------------------------------------------------------------------------------------+\n");
+        printf("\t\t\t|                         [1]. PHUONG PHAP CHIA DOI                                   |\n");
+        printf("\t\t\t+-------------------------------------------------------------------------------------+\n");
+        printf("\t\t\t|                         [2]. PHUONG PHAP DAY CUNG                                   |\n");
+        printf("\t\t\t+-------------------------------------------------------------------------------------+\n");
+        printf("\t\t\t|                         [3]. PHUONG PHAP TIEP TUYEN                                 |\n");
+        printf("\t\t\t+-------------------------------------------------------------------------------------+\n");
+        printf("\t\t\t|                         [4]. THOAT                                                  |\n");
+        printf("\t\t\t+-------------------------------------------------------------------------------------+\n");
+        printf("Nhap vao lua chon:");
+        scanf("%d",&choose);
+        switch (choose) {
+            case 1:
+                for (int i = 0; i < n; ++i) {
+                    arrKPL[i].a = arrKPL1[i].a;
+                    arrKPL[i].b = arrKPL1[i].b;
+                }
+                printf("Su dung phuong phap chia doi thu gon cac khoang phan li nghiem da cho ta duoc: \n");
+                chiaDoi(1e-10);
+                break;
+            case 2:
+                for (int i = 0; i < n; ++i) {
+                    arrKPL[i].a = arrKPL1[i].a;
+                    arrKPL[i].b = arrKPL1[i].b;
+                }
+                printf("Su dung phuong phap day cung thu gon cac khoang phan li nghiem da cho ta duoc: \n");
+                dayCung(1e-10);
+                break;
+            case 3:
+                for (int i = 0; i < n; ++i) {
+                    arrKPL[i].a = arrKPL1[i].a;
+                    arrKPL[i].b = arrKPL1[i].b;
+                }
+                printf("Su dung phuong phap tiep tuyen thu gon cac khoang phan li nghiem da cho ta duoc: \n");
+                tiepTuyen(1e-10);
+                break;
+            case 4:
+                printf("Quay lai menu chon cach tinh sai so !!!");
+                break;
+            default:
+                printf("Nhap sai lua chon moi nhap lai:\n");
+        }
+    }while (choose != 4);
+}
+
+//Ruts gọn
 void main() {
     int choose;
     float buocNhay;
@@ -279,11 +458,14 @@ void main() {
                 buocNhay = (cT-cD)/100;
                 printf("Voi khoang cach k = 1/100 khoang chua nghiem ta su dung thuat toan vet can de tim khoang phan ly nghiem duoc:");
                 timKhoangPLNghiem(buocNhay);
-
-                //Thu gọn khoảng phân ly nghiệm bằng phương pháp chia đôi
+                for (int i = 0; i < n; ++i) {
+                    arrKPL1[i].a = arrKPL[i].a;
+                    arrKPL1[i].b = arrKPL[i].b;
+                }
+                //Thu gọn khoảng phân ly nghiệm
                 printf("\n");
-                printf("Su dung thuat toan chia doi de rut gon khoang cach ly nghiem voi sai so cho truoc la: 0.0001 ta duoc: \n");
-                chiaDoi(0.0001);
+                printf("Chon thuat toan thu gon khoang phan li nghiem:\n");
+                menu();
                 break;
             case 2:
                 printf("\n");
@@ -344,12 +526,16 @@ void main() {
                     }
                 }
                 if (index != 1){
-                    printf("Su dung thuat toan chia doi de rut gon khoang cach ly nghiem voi sai so cho truoc la: 0.0001 ta duoc: \n");
+                    printf("Chon thuat toan rut gon khoang phan li nghiem\n");
                 }
                 if (index == 1){
-                    printf("\n Khong tim duoc nghiem cua phuong trinh bang phuong phap chia doi\n");
+                    printf("\n Khong tim duoc nghiem cua phuong trinh\n");
                 }
-                chiaDoi(0.0001);
+                for (int i = 0; i < n; ++i) {
+                    arrKPL1[i].a = arrKPL[i].a;
+                    arrKPL1[i].b = arrKPL[i].b;
+                }
+                menu();
                 break;
             case 3:
                 for (int i = 0; i < n; ++i) {
