@@ -3,4 +3,4 @@ project(FFinallProject C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(FFinallProject main.c)
+add_executable(FFinallProject main.c fx.h bankinh.h cuctri.h timkhoangphanli.h chiadoi.h daycung.h tieptuyen.h)

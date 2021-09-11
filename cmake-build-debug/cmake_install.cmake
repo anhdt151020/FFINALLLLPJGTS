@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/fx=0/FFINALLLLPJGTS
+# Install script for directory: C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/fx=0/FFINALLLLPJGTS/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

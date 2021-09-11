@@ -6,11 +6,39 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/fx=0/FFINALLLLPJGTS/main.c
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/bankinh.h
+
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/chiadoi.h
+
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/cuctri.h
+
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/daycung.h
+
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/fx.h
+
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/main.c
 stdio.h
 -
 math.h
 -
 stdlib.h
 -
+fx.h
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/fx.h
+bankinh.h
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/bankinh.h
+cuctri.h
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/cuctri.h
+timkhoangphanli.h
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/timkhoangphanli.h
+chiadoi.h
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/chiadoi.h
+daycung.h
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/daycung.h
+tieptuyen.h
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/tieptuyen.h
+
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/tieptuyen.h
+
+C:/Users/TuanAnh/OneDrive - Hanoi University of Science and Technology/Documents/GTS-NumericalAnalysis/code/GTSChuong1/FFINALLLLPJGTS/timkhoangphanli.h
 
